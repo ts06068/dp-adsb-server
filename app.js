@@ -5,6 +5,7 @@ const sbs1 = require("sbs1");
 const express = require("express");
 const cron = require("node-cron");
 const axios = require("axios");
+const bodyParser = require("body-parser");
 
 const PORT = 18888;
 const client = sbs1.createClient();
