@@ -38,6 +38,17 @@ const fetchRemoteADSBMessage = () =>
       isConnectionEstablished = false;
     });
 
+const doInitialFetch = async () => {
+  if (!isInitialfetchCompleted) {
+    const res = await fetchRemoteADSBMessage();
+
+    if (res) {
+      task.start();
+      isInitialfetchCompleted = true;
+    }
+  }
+};
+
 //receive local ADSB messages
 client.on("message", function (msg) {
   if (
@@ -62,14 +73,7 @@ const task = cron.schedule(
 );
 
 //initial fetch on load
-if (!isInitialfetchCompleted) {
-  const res = await fetchRemoteADSBMessage();
-
-  if (res) {
-    task.start();
-    isInitialfetchCompleted = true;
-  }
-}
+doInitialFetch();
 
 app.get("/aircrafts", (req, res) => {
   if (isConnectionEstablished) {
